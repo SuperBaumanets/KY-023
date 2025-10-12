@@ -14,17 +14,17 @@
 /** @defgroup KY023_Exported_Types Exported Types
   * @{
   */
-typedef int32_t  (*KY023_Init_Func)     (void);
-typedef int32_t  (*KY023_DeInit_Func)   (void);
-typedef uint32_t (*KY023_ReadADC_Func)  (uint8_t);
-typedef uint8_t  (*KY023_ReadGPIO_Func) (void);
+typedef int32_t  (*KY023_Init_Func)         (void);
+typedef int32_t  (*KY023_DeInit_Func)       (void);
+typedef uint32_t (*KY023_ReadValADC_Func)   (uint8_t);
+typedef uint8_t  (*KY023_ReadValGPIO_Func)  (void);
 
 typedef struct
 {
   KY023_Init_Func          Init;
   KY023_DeInit_Func        DeInit;
-  KY023_ReadADC_Func       ReadADC;
-  KY023_ReadGPIO_Func      ReadPin;
+  KY023_ReadValADC_Func    ReadValADC;
+  KY023_ReadValGPIO_Func   ReadValPin;
 } KY023_IO_t;
 
  
@@ -32,69 +32,40 @@ typedef struct
 {
   KY023_IO_t           IO;
   KY023_ctx_t          Ctx;
-  uint32_t             ResolutionADC;
+  uint32_t             ResolutionADC; // TODO: delete
 } KY023_Object_t;
+/**
+ * @}
+ */
 
-typedef struct
+/** 
+  * @brief  KY023 SW Event  
+  */  
+typedef enum  
 {
-  /* Control functions */
-  int32_t   (*Init                )(KY023_Object_t*);
-  uint32_t  (*GetValVRX           )(KY023_Object_t*);
-  uint32_t  (*GetValVRY           )(KY023_Object_t*);
-  int32_t   (*SetExtremeValVRX    )(KY023_Object_t*, uint32_t minVRX, uint32_t maxVRX);
-  int32_t   (*SetExtremeValVRY    )(KY023_Object_t*, uint32_t minVRY, uint32_t maxVRY);
-  int8_t    (*GetEventSW          )(KY023_Object_t*);
-  int32_t   (*DeInit              )(KY023_Object_t*);
-
-  /* Update functions*/
-  void  (*UpdateButton    ) (KY023_Object_t*); 
-  void  (*UpdateADC       ) (KY023_Object_t*);
-}KY023_Drv_t;
-/**
- * @}
- */
-
-/** 
-  * @brief  ST7735S Status  
-  */  
-#define ST7735S_OK                (0)
-#define ST7735S_ERROR             (-1)
-/**
- * @}
- */
-
-/** 
-  * @brief  ST7735S Size  
-  */  
-#define  ST7735S_WIDTH           128U
-#define  ST7735S_HEIGHT          160U
+  KY023_SW_NotPress,      // KY023 SW not press
+  KY023_SW_Press,     		// KY023 SW press
+  KY023_SW_ShortPress,		// KY023 SW short press
+  KY023_SW_LongPress,  		// KY023 SW long press
+}KY023_SW_Event_t;
 /**
  * @}
  */
   
-/** @defgroup ST7735S_Exported_Functions Exported Functions
+/** @defgroup KY023_Exported_Functions Exported Functions
   * @{
   */ 
-int32_t  KY023_RegisterBusIO (KY023_Object_t *pObj, KY023_IO_t *pIO);
-int32_t  KY023_Init(KY023_Object_t *pObj);
-uint32_t KY023_GetValVRX(KY023_Object_t*);
-uint32_t KY023_GetValVRY(KY023_Object_t*);
-int32_t  KY023_SetExtremeValVRX(KY023_Object_t*, uint32_t minVRX, uint32_t maxVRX);
-int32_t  KY023_SetExtremeValVRY(KY023_Object_t*, uint32_t minVRY, uint32_t maxVRY);
-int8_t   KY023_GetEventSW(KY023_Object_t*);
-int32_t  KY023_DeInit(KY023_Object_t*);
+int32_t           KY023_RegisterBusIO (KY023_Object_t *pObj, KY023_IO_t *pIO);
+int32_t           KY023_Init(KY023_Object_t *pObj);
+uint32_t          KY023_GetValVRX(KY023_Object_t* pObj);
+uint32_t          KY023_GetValVRY(KY023_Object_t* pObj);
+int32_t           KY023_SetExtremeValVRX(KY023_Object_t*, uint32_t minVRX, uint32_t maxVRX);
+int32_t           KY023_SetExtremeValVRY(KY023_Object_t*, uint32_t minVRY, uint32_t maxVRY);
+KY023_SW_Event_t  KY023_GetEventSW(KY023_Object_t* pObj);
+int32_t           KY023_DeInit(KY023_Object_t* pObj);
 
-void     KY023_UpdateButton(KY023_Object_t*); 
-void     KY023_UpdateADC(KY023_Object_t*);
-/**
- * @}
- */
-
-
-/** @defgroup ST7735S_Exported_Variable Exported Variable
-  * @{
-  */ 
-extern KY023_Drv_t   KY023_Driver;
+void              KY023_UpdateButton(KY023_Object_t* pObj); 
+void              KY023_UpdateValVRXVRY(KY023_Object_t* pObj);
 /**
  * @}
  */
