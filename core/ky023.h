@@ -21,10 +21,11 @@ typedef uint8_t  (*KY023_ReadValGPIO_Func)  (void);
 
 typedef struct
 {
-  KY023_Init_Func          Init;
-  KY023_DeInit_Func        DeInit;
-  KY023_ReadValADC_Func    ReadValADC;
-  KY023_ReadValGPIO_Func   ReadValPin;
+  KY023_Init_Func           Init;
+  KY023_DeInit_Func         DeInit;
+  KY023_ReadValADC_Func     ReadValADC;
+  KY023_ReadValGPIO_Func    ReadValPin;
+  uint32_t                  ResolutionADC;
 } KY023_IO_t;
 
  
@@ -32,7 +33,6 @@ typedef struct
 {
   KY023_IO_t           IO;
   KY023_ctx_t          Ctx;
-  uint32_t             ResolutionADC; // TODO: delete
 } KY023_Object_t;
 /**
  * @}
@@ -59,8 +59,6 @@ int32_t           KY023_RegisterBusIO (KY023_Object_t *pObj, KY023_IO_t *pIO);
 int32_t           KY023_Init(KY023_Object_t *pObj);
 uint32_t          KY023_GetValVRX(KY023_Object_t* pObj);
 uint32_t          KY023_GetValVRY(KY023_Object_t* pObj);
-int32_t           KY023_SetExtremeValVRX(KY023_Object_t*, uint32_t minVRX, uint32_t maxVRX);
-int32_t           KY023_SetExtremeValVRY(KY023_Object_t*, uint32_t minVRY, uint32_t maxVRY);
 KY023_SW_Event_t  KY023_GetEventSW(KY023_Object_t* pObj);
 int32_t           KY023_DeInit(KY023_Object_t* pObj);
 
